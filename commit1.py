@@ -255,3 +255,74 @@ for xp_ganado in batallas:
         xp -= xp_necesario 
 
         print(f'Nivel {nivel}')
+
+
+        # Funciones RPG 
+
+ 
+
+def calcular_dano(ataque: int, defensa: int) -> int: 
+
+    '''Retorna el dano real (minimo 1)''' 
+
+    dano = ataque - defensa 
+
+    return dano if dano > 0 else 1 
+
+ 
+
+def aplicar_curacion( 
+
+    vida: float, cur: float, max_vida: float) -> float: 
+
+    '''Cura sin pasar el maximo''' 
+
+    nueva = vida + cur 
+
+    return min(nueva, max_vida) 
+
+ 
+
+def mostrar_estado( 
+
+    nombre: str, vida: float, nivel: int): 
+
+    '''Imprime el estado del personaje''' 
+
+    print(f'{nombre} [Nv{nivel}] HP: {vida:.0f}') 
+
+ 
+
+# Prueba 
+
+d = calcular_dano(20, 8) 
+
+print(f'Dano: {d}') 
+
+v = aplicar_curacion(40, 80, 100) 
+
+mostrar_estado('Frodo', v, 3)
+
+
+"""
+Parametros: xp_actual (int), xp_necesario (int), nivel_actual (int) 
+Logica: si xp_actual >= xp_necesario, incrementa nivel en 1, 
+        reinicia xp a 0, imprime mensaje de nivel alcanzado. 
+        Retorna el nuevo nivel. 
+"""
+
+
+def subirNivel(  xp_actual , xp_necesario , nivel_actual ):
+    if(xp_actual >= xp_necesario):
+        nivel_actual += 1
+        xp_actual = 0
+        print(f"nuevo nivel alcanzado {nivel_actual}")
+    else:
+        print(f"xp insuficiente {nivel_actual}")
+    return nivel_actual
+
+""" Prueba con: xp=110, xpNecesario=100, nivel=3 -> debe retornar 4 
+            xp=80, xpNecesario=100, nivel=3 -> debe retornar 3 (no sube)  """
+
+print( "xp=110, xpNecesario=100, nivel=3, retorno: " + str(subirNivel(110,100,3)) )
+print( "xp=80, xpNecesario=100, nivel=3, retorno: " + str(subirNivel(80,100,3)) )
