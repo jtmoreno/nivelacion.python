@@ -326,3 +326,135 @@ def subirNivel(  xp_actual , xp_necesario , nivel_actual ):
 
 print( "xp=110, xpNecesario=100, nivel=3, retorno: " + str(subirNivel(110,100,3)) )
 print( "xp=80, xpNecesario=100, nivel=3, retorno: " + str(subirNivel(80,100,3)) )
+
+# =========================================
+# EJERCICIO INTEGRADOR RPG
+# =========================================
+
+# HEROE
+heroe = {
+    'nombre': 'Aragorn',
+    'clase': 'Guerrero',
+    'nivel': 2,
+    'vida': 80.0,
+    'vida_maxima': 100.0,
+    'ataque': 18,
+    'defensa': 8,
+    'vivo': True
+}
+
+# ENEMIGOS
+enemigos = [
+    {'nombre': 'Goblin', 'vida': 40, 'ataque': 8},
+    {'nombre': 'Orco', 'vida': 70, 'ataque': 14},
+    {'nombre': 'Dragon', 'vida': 120, 'ataque': 25}
+]
+
+# FUNCION DE COMBATE
+def combatir(
+    vidaHero,
+    ataqueHero,
+    defHero,
+    vidaEnemigo,
+    ataqueEnemigo
+):
+
+    ronda = 1
+
+    while vidaHero > 0 and vidaEnemigo > 0:
+
+        print(f'\n--- Ronda {ronda} ---')
+
+        # HEROE ATACA
+        vidaEnemigo -= ataqueHero
+
+        if vidaEnemigo < 0:
+            vidaEnemigo = 0
+
+        print(f'Heroe ataca -> enemigo queda con {vidaEnemigo} HP')
+
+        # SI EL ENEMIGO MUERE
+        if vidaEnemigo <= 0:
+            print('Enemigo derrotado!')
+            break
+
+        # ENEMIGO CONTRAATACA
+        dano_enemigo = ataqueEnemigo - defHero
+
+        # DANO MINIMO
+        if dano_enemigo <= 0:
+            dano_enemigo = 1
+
+        vidaHero -= dano_enemigo
+
+        if vidaHero < 0:
+            vidaHero = 0
+
+        print(f'Enemigo contraataca -> heroe recibe {dano_enemigo}')
+        print(f'Vida del heroe: {vidaHero}')
+
+        ronda += 1
+
+    return vidaHero, vidaEnemigo
+
+
+# CICLO PRINCIPAL
+enemigos_derrotados = 0
+
+for enemigo in enemigos:
+
+    print('\n======================')
+    print(f'Nuevo enemigo: {enemigo["nombre"]}')
+    print('======================')
+
+    vida_heroe, vida_enemigo = combatir(
+        heroe['vida'],
+        heroe['ataque'],
+        heroe['defensa'],
+        enemigo['vida'],
+        enemigo['ataque']
+    )
+
+    # ACTUALIZAR VIDA
+    heroe['vida'] = vida_heroe
+
+    # SI EL HEROE MUERE
+    if heroe['vida'] <= 0:
+
+        heroe['vivo'] = False
+
+        print('\nGAME OVER')
+        print(f'{heroe["nombre"]} ha muerto')
+
+        break
+
+    # SI EL HEROE GANA
+    else:
+
+        enemigos_derrotados += 1
+
+        print(f'\n{enemigo["nombre"]} derrotado!')
+
+        # CURACION
+        heroe['vida'] += 20
+
+        # NO SUPERAR VIDA MAXIMA
+        if heroe['vida'] > heroe['vida_maxima']:
+            heroe['vida'] = heroe['vida_maxima']
+
+        print(f'{heroe["nombre"]} recupera 20 HP')
+        print(f'Vida actual: {heroe["vida"]}')
+
+
+# RESULTADO FINAL
+print('\n======================')
+print('RESULTADO FINAL')
+print('======================')
+
+print(f'Enemigos derrotados: {enemigos_derrotados}')
+print(f'Vida restante: {heroe["vida"]}')
+
+if enemigos_derrotados == len(enemigos):
+    print('VICTORIA TOTAL!')
+else:
+    print('DERROTA...')
